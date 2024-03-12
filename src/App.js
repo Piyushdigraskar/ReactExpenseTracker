@@ -21,10 +21,12 @@ const App = () => {
         <AuthPage />
       </Route>
       <Route path='/profile'>
-        <ProfilePage />
+      {isLoggedIn ? <ProfilePage /> : <Redirect to='/login' />}
+        
       </Route>
       <Route path='/update'>
-        <ProfileFormPage />
+      {isLoggedIn ? <ProfileFormPage /> : <Redirect to='/login' />}
+        
       </Route>
       <Route path='/login'>
         {!isLoggedIn ? <LoginPage /> : <Redirect to='/profile' />}

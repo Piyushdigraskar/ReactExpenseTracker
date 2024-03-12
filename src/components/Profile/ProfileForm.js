@@ -1,5 +1,5 @@
-import { useRef, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useRef, useContext,useEffect } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import React from "react";
 import AuthContext from "../../Store/AuthContext";
 import Classes from './ProfileForm.module.css';
@@ -7,8 +7,39 @@ const ProfileForm = () => {
     const authCtx = useContext(AuthContext);
     const fullNameinputRef = useRef();
     const photoUrlInputRef = useRef();
-
+    
     const history = useHistory();
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyA3xAw52bOr1fcz2EABZVQ8xdEs9k_qURs`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        idToken: authCtx.token
+                    }),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const profile = data.users[0];
+                    // Pre-fill input fields with profile data if available
+                    if (profile) {
+                        fullNameinputRef.current.value = profile.displayName || '';
+                        photoUrlInputRef.current.value = profile.photoUrl || '';
+                    }
+                    
+                } else {
+                    console.error('Failed to fetch profile data');
+                }
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        };
+
+        fetchProfileData();
+    }, [authCtx.token]);
 
     const SubmitHandler = (event) => {
         event.preventDefault();
@@ -18,18 +49,23 @@ const ProfileForm = () => {
         fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyA3xAw52bOr1fcz2EABZVQ8xdEs9k_qURs`, {
             method: 'POST',
             body: JSON.stringify({
-                idToken:authCtx.token,
+                idToken: authCtx.token,
                 displayName: enteredFullName,
                 photoUrl: enteredPhotoUrl,
 
-                returnSecureToken:false
+                returnSecureToken: false
             }),
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'content-type': 'application/json'
             }
-        }).then(res =>{
-            history.replace('/profile');
-            console.log('User Profile Successfully updated');
+        }).then(res => {
+            if (res.ok) {
+                return res.json().then(data => {
+                    authCtx.updateProfile(data.localId);
+                    history.replace('/profile');
+                    console.log('User Profile Successfully updated');
+                })
+            }
         })
         fullNameinputRef.current.value = '';
         photoUrlInputRef.current.value = '';
