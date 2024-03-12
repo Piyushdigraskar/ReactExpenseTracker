@@ -1,9 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import classes from './Login.module.css';
+import AuthContext from "../../Store/AuthContext";
+import { useHistory } from "react-router-dom";
 
 const Login = ()=>{
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
+
+    const History = useHistory();
+    const authCtx = useContext(AuthContext);
+    
 
     const SubmitHandler = (event)=>{
         event.preventDefault();
@@ -25,10 +31,12 @@ const Login = ()=>{
           }).then(res =>{
             if(res.ok){
                 return res.json().then(data =>{
-                    localStorage.setItem('token', data.idToken);
+                    authCtx.login(data.idToken);
+                    History.replace('/profile');
+
                     console.log('User successfully logged in');
                 })
-            }else{
+            }else{ 
                 return res.json().then((data) => {
                     let errorMessage = ' failed To Login';
                     alert(errorMessage);
@@ -37,6 +45,9 @@ const Login = ()=>{
           }).catch(err =>{
             console.error('SomethingWrong With Response',err);
           })
+
+          emailInputRef.current.value = '';
+          passwordInputRef.current.value = '';
     }
     return (
         <section className={classes.auth}>

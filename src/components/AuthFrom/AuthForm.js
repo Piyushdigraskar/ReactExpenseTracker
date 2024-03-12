@@ -45,6 +45,10 @@ const AuthForm = () => {
             console.error('Passwords Do not Match');
         }
 
+        emailInputRef.current.value = '';
+        passwordInputRef.current.value = '';
+        rePasswordInputRef.current.value = '';
+
     }
     return <section className={classes.auth}>
         <h1 >SignUp</h1>

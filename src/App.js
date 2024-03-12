@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Route, } from 'react-router-dom';
 import { Switch, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-
 import AuthPage from './Pages/AuthPage';
 import HomePage from './Pages/HomwPage';
 import ProfilePage from './Pages/ProfilePage';
 import LoginPage from './Pages/LoginPage';
 import Layout from './components/Layout/Layout';
+import ProfileFormPage from './Pages/UpdateProfile';
+import AuthContext from './Store/AuthContext';
 
 const App = () => {
-
-  const isLoggedIn = localStorage.getItem('token');
+  const authCtx = useContext(AuthContext)
+  const isLoggedIn = authCtx.isLoggedIn;
   return <Layout>
     <Switch>
       <Route path='/' exact>
@@ -21,6 +22,9 @@ const App = () => {
       </Route>
       <Route path='/profile'>
         <ProfilePage />
+      </Route>
+      <Route path='/update'>
+        <ProfileFormPage />
       </Route>
       <Route path='/login'>
         {!isLoggedIn ? <LoginPage /> : <Redirect to='/profile' />}
