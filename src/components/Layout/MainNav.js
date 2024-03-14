@@ -28,6 +28,11 @@ const MainNav = () => {
                     </Link>
                 </li>}
                 {isLoggedIn && <li>
+                    <Link to='/expense'>
+                        Expenses
+                    </Link>
+                </li>}
+                {isLoggedIn && <li>
                     <Link to='/profile'>
                         Profile
                     </Link>

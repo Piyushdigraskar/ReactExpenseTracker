@@ -4,6 +4,7 @@ import { Switch, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import AuthPage from './Pages/AuthPage';
 import HomePage from './Pages/HomwPage';
 import ProfilePage from './Pages/ProfilePage';
+import ExpensePage from './Pages/ExpensePage';
 import LoginPage from './Pages/LoginPage';
 import ForgotPasswordPage from './Pages/ForgotPasswordpage';
 import Layout from './components/Layout/Layout';
@@ -30,6 +31,10 @@ const App = () => {
       </Route>
       <Route path='/update'>
       {isLoggedIn ? <ProfileFormPage /> : <Redirect to='/login' />}
+        
+      </Route>
+      <Route path='/expense'>
+      {isLoggedIn ? <ExpensePage /> : <Redirect to='/login' />}
         
       </Route>
       <Route path='/login'>
