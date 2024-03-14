@@ -1,6 +1,7 @@
 import React, { useRef, useContext } from "react";
 import classes from './Login.module.css';
 import AuthContext from "../../Store/AuthContext";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 
 const Login = ()=>{
@@ -65,6 +66,13 @@ const Login = ()=>{
                 <button>Login</button>
             </div>
         </form>
+        <div className={classes.actions}>
+          <Link to='/forgot'>
+          <button > 
+            Forgot password
+          </button>
+          </Link>
+        </div>
     </section>
     )
 }

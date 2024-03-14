@@ -5,6 +5,7 @@ import AuthPage from './Pages/AuthPage';
 import HomePage from './Pages/HomwPage';
 import ProfilePage from './Pages/ProfilePage';
 import LoginPage from './Pages/LoginPage';
+import ForgotPasswordPage from './Pages/ForgotPasswordpage';
 import Layout from './components/Layout/Layout';
 import ProfileFormPage from './Pages/UpdateProfile';
 import AuthContext from './Store/AuthContext';
@@ -19,6 +20,9 @@ const App = () => {
       </Route>
       <Route path='/auth'>
         <AuthPage />
+      </Route>
+      <Route path='/forgot'>
+        <ForgotPasswordPage />
       </Route>
       <Route path='/profile'>
       {isLoggedIn ? <ProfilePage /> : <Redirect to='/login' />}
