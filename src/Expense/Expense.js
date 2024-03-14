@@ -1,19 +1,32 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import classes from './Expense.module.css';
+import ItemContext from "../Store/ItemContext";
 
 
 const Expense = () => {
-
+    const [category, setCategory] = useState('');
     const priceInputRef = useRef();
     const descriptionInputRef = useRef();
+    const itemCtx = useContext(ItemContext);
 
     const SubmitHandler = (event) => {
         event.preventDefault();
         const enteredPrice = priceInputRef.current.value;
         const enteredDesc = descriptionInputRef.current.value;
-        console.log(enteredPrice, enteredDesc);
+        itemCtx.addItem({
+            price:enteredPrice,
+            description:enteredDesc,
+            category:category
+        })
 
+        priceInputRef.current.value = '';
+        descriptionInputRef.current.value = '';
 
+    }
+
+    const categoryChangeHandler = (event)=>{
+        event.preventDefault();
+        setCategory(event.target.value)
     }
 
     return <section className={classes.expense}>
@@ -31,7 +44,7 @@ const Expense = () => {
             </div>
             <div className={classes.control}>
                 <label htmlFor="option"></label>
-                <select id="option">
+                <select id="option" onChange={categoryChangeHandler}>
                     <option value="">Select an option</option>
                     <option value="food">Food</option>
                     <option value="petrol">Petrol</option>

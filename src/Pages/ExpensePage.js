@@ -1,8 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Expense from "../Expense/Expense";
+import Items from "../Expense/Items";
 
 const ExpensePage = ()=>{
-    return <Expense />;
+    return <Fragment>
+        <Expense />
+        <Items />
+    </Fragment>;
 }
 
 export default ExpensePage;
