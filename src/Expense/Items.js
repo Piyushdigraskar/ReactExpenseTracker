@@ -6,6 +6,16 @@ import ItemContext from "../Store/ItemContext";
 const Items = () => {
     const itemCtx = useContext(ItemContext);
 
+    if (!itemCtx.items || !Array.isArray(itemCtx.items)) {
+        return (
+            <section className={classes.section}>
+                <div className={classes.container}>
+                    <p>Loading...</p>
+                </div>
+            </section>
+        );
+    }
+
     return <section className={classes.section}>
         <div className={classes.container}>
             <ul className={classes.list}>
