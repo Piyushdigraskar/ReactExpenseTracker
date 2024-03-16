@@ -17,11 +17,11 @@ const MainNav = () => {
         </Link>
         <nav>
             <ul>
-                <li>
+                {!isLoggedIn && <li>
                     <Link to='/auth'>
                         SignUp
                     </Link>
-                </li>
+                </li>}
                 {!isLoggedIn && <li>
                     <Link to='/login'>
                         Login
@@ -37,10 +37,10 @@ const MainNav = () => {
                         Profile
                     </Link>
                 </li>}
-                {isLoggedIn && 
-                <li>
-                    <button onClick={logoutHandler}>Logout</button>
-                </li>
+                {isLoggedIn &&
+                    <li>
+                        <button onClick={logoutHandler}>Logout</button>
+                    </li>
                 }
             </ul>
         </nav>
