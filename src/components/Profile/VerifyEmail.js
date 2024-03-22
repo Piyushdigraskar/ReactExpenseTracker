@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import classes from './VerifyEmail.module.css';
-import AuthContext from "../../Store/AuthContext";
+import { useSelector } from "react-redux";
+
 
 const Verify = ()=>{
-    const authCtx = useContext(AuthContext);
+    const token = useSelector(state => state.auth.token);
     const SubmitHandler = ()=>{
         fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyA3xAw52bOr1fcz2EABZVQ8xdEs9k_qURs`, {
             method:'POST',
             body:JSON.stringify({
                 requestType: "VERIFY_EMAIL",
-                idToken:authCtx.token
+                idToken:token
             }),
             headers:{
                 'content-type':'application/json'

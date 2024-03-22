@@ -1,10 +1,12 @@
-import { useRef, useContext,useEffect } from "react";
+import { useRef,useEffect } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import React from "react";
-import AuthContext from "../../Store/AuthContext";
+import { authActions } from "../../Store/Auth";
 import Classes from './ProfileForm.module.css';
+import { useDispatch, useSelector } from "react-redux";
 const ProfileForm = () => {
-    const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const token = useSelector(state => state.auth.token);
     const fullNameinputRef = useRef();
     const photoUrlInputRef = useRef();
     
@@ -15,7 +17,7 @@ const ProfileForm = () => {
                 const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyA3xAw52bOr1fcz2EABZVQ8xdEs9k_qURs`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        idToken: authCtx.token
+                        idToken: token
                     }),
                     headers: {
                         'content-type': 'application/json'
@@ -39,7 +41,7 @@ const ProfileForm = () => {
         };
 
         fetchProfileData();
-    }, [authCtx.token]);
+    }, [token]);
 
     const SubmitHandler = (event) => {
         event.preventDefault();
@@ -49,7 +51,7 @@ const ProfileForm = () => {
         fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyA3xAw52bOr1fcz2EABZVQ8xdEs9k_qURs`, {
             method: 'POST',
             body: JSON.stringify({
-                idToken: authCtx.token,
+                idToken: token,
                 displayName: enteredFullName,
                 photoUrl: enteredPhotoUrl,
 
@@ -61,7 +63,7 @@ const ProfileForm = () => {
         }).then(res => {
             if (res.ok) {
                 return res.json().then(data => {
-                    authCtx.updateProfile(data.localId);
+                    dispatch(authActions.updateProfile(data.localId));
                     history.replace('/profile');
                     console.log('User Profile Successfully updated');
                 })

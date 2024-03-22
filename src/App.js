@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Route, } from 'react-router-dom';
 import { Switch, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import AuthPage from './Pages/AuthPage';
@@ -9,11 +9,12 @@ import LoginPage from './Pages/LoginPage';
 import ForgotPasswordPage from './Pages/ForgotPasswordpage';
 import Layout from './components/Layout/Layout';
 import ProfileFormPage from './Pages/UpdateProfile';
-import AuthContext from './Store/AuthContext';
+
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const authCtx = useContext(AuthContext)
-  const isLoggedIn = authCtx.isLoggedIn;
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  
   return <Layout>
     <Switch>
       <Route path='/' exact>

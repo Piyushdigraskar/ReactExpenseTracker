@@ -1,15 +1,17 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef } from "react";
 import classes from './Login.module.css';
-import AuthContext from "../../Store/AuthContext";
+import { authActions } from "../../Store/Auth";
+import {  useDispatch } from "react-redux";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 
 const Login = ()=>{
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
-
     const History = useHistory();
-    const authCtx = useContext(AuthContext);
+    
+    const dispatch = useDispatch();
+
     
 
     const SubmitHandler = (event)=>{
@@ -32,7 +34,7 @@ const Login = ()=>{
           }).then(res =>{
             if(res.ok){
                 return res.json().then(data =>{
-                    authCtx.login(data.idToken);
+                    dispatch(authActions.login(data.idToken));
                     History.replace('/profile');
 
                     console.log('User successfully logged in');

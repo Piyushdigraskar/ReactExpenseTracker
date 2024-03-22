@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import classes from './Profile.module.css';
-import AuthContext from "../../Store/AuthContext";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import Verify from "./VerifyEmail";
+import {useSelector } from "react-redux";
 
 const Profile = ()=>{
-    const authCtx = useContext(AuthContext);
 
-    const isProComplete = authCtx.isProfileComplete;
+    const isProComplete = useSelector(state => state.auth.isProfileComplete);
     return <section className={classes.starting}>
         <Verify/>
         <h1>Welcome To Expense Tracker</h1>

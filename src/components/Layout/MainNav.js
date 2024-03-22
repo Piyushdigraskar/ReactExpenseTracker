@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import classes from './MainNav.module.css'
 import { Link } from "react-router-dom";
-import AuthContext from "../../Store/AuthContext";
+import { authActions } from "../../Store/Auth";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainNav = () => {
-
-    const authCtx = useContext(AuthContext);
-    const isLoggedIn = authCtx.isLoggedIn;
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    
+    
     const logoutHandler = () => {
-        authCtx.logout();
+        dispatch(authActions.logout());
     }
 
     return <header className={classes.header}>
