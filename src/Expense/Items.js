@@ -8,6 +8,8 @@ const Items = () => {
     const dispatch = useDispatch();
     const items = useSelector(state => state.item.items);
 
+    const totalExpenses = items.reduce((total, expense) => total + expense.price, 0);
+
     const EditItemHandler = (id) => {
         const newCategory = prompt('Enter new category:');
         const newPrice = prompt('Enter new price:');
@@ -31,6 +33,9 @@ const Items = () => {
     return (
         <section className={classes.section}>
             <div className={classes.container}>
+            {totalExpenses > 10000 && (
+                    <button className={classes.premiumButton}>Activate Premium</button>
+                )}
                 <ul className={classes.list}>
                     {items.map((expense) => (
                         <li key={uuidv4()} className={classes.item}>
