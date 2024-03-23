@@ -40,3 +40,13 @@
     background-color: #333;
     color: #fff;
 }
+
+.linkButton {
+    /* Add your styling here */
+    color: blue; /* Example color */
+    text-decoration: underline; /* Example underline */
+    background-color: transparent; /* Example transparent background */
+    border: none; /* Example no border */
+    cursor: pointer;
+    /* Add more styles as needed */
+}
