@@ -14,8 +14,9 @@
 }
 
 .item {
-    background-color: #fff;
+    background-color: white;
     border: 1px solid #ccc;
+    color: black;
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
@@ -33,4 +34,9 @@
 
 .premiumButton:hover {
     background-color: #0056b3;
+}
+.dark {
+    /* Add styles for dark theme */
+    background-color: #333;
+    color: #fff;
 }

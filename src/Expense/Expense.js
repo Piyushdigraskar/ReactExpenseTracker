@@ -1,23 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import classes from './Expense.module.css';
+import { addItem } from "../Store/Item";
 import { useDispatch } from "react-redux";
-import { itemActions } from "../Store/Item";
-
+import { fetchItems } from "../Store/Item";
 
 
 const Expense = () => {
-
+    const dispatch = useDispatch();
     const [category, setCategory] = useState('');
     const priceInputRef = useRef();
     const descriptionInputRef = useRef();
-    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchItems()); // Fetch items every time the component re-renders
+    }, [dispatch]); //
 
     const SubmitHandler = (event) => {
         event.preventDefault();
         const enteredPrice = priceInputRef.current.value;
         const enteredDesc = descriptionInputRef.current.value;
         dispatch(
-            itemActions.addItem({
+            addItem({
                 price: enteredPrice,
                 description: enteredDesc,
                 category: category

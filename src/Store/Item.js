@@ -7,7 +7,7 @@ const initialState = {
   error: null
 };
 
-const itemSlicer = createSlice({
+const itemSlice = createSlice({
   name: 'items',
   initialState,
   reducers: {
@@ -23,26 +23,54 @@ const itemSlicer = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    addItem(state, action) {
+    addItemStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    addItemSuccess(state, action) {
       state.items.push(action.payload);
+      state.loading = false;
     },
-    editItem(state, action) {
-      const index = state.items.findIndex(item => item.idd === action.payload.idd);
+    addItemFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    editItemStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    editItemSuccess(state, action) {
+      const { idd, updatedItem } = action.payload;
+      const index = state.items.findIndex(item => item.idd === idd);
       if (index !== -1) {
-        state.items[index] = action.payload;
+        state.items[index] = updatedItem;
       }
+      state.loading = false;
     },
-    deleteItem(state, action) {
-      state.items = state.items.filter(item => item.idd !== action.payload);
+    editItemFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteItemStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    deleteItemSuccess(state, action) {
+      const idd = action.payload;
+      state.items = state.items.filter(item => item.idd !== idd);
+      state.loading = false;
+    },
+    deleteItemFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
     }
   }
 });
 
-export const itemActions = itemSlicer.actions;
-const { fetchItemsStart, fetchItemsSuccess, fetchItemsFailure} = itemActions;
+export const itemActions = itemSlice.actions;
 
 export const fetchItems = () => async dispatch => {
-  dispatch(fetchItemsStart());
+  dispatch(itemActions.fetchItemsStart());
   try {
     const response = await axios.get(`https://expense-tracker--react-default-rtdb.firebaseio.com/expense.json`);
     if (response.status === 200) {
@@ -50,53 +78,56 @@ export const fetchItems = () => async dispatch => {
         ...value,
         idd: key
       }));
-      dispatch(fetchItemsSuccess(fetchedItems));
+      dispatch(itemActions.fetchItemsSuccess(fetchedItems));
     } else {
       throw new Error('Items cannot be obtained from firebase');
     }
   } catch (error) {
-    dispatch(fetchItemsFailure(error.message));
+    dispatch(itemActions.fetchItemsFailure(error.message));
   }
 };
 
 export const addItem = item => async dispatch => {
+  dispatch(itemActions.addItemStart());
   try {
     const response = await axios.post(`https://expense-tracker--react-default-rtdb.firebaseio.com/expense.json`, item);
     if (response.status === 200) {
       const newItem = { ...item, idd: response.data.name };
-      dispatch(addItem(newItem));
+      dispatch(itemActions.addItemSuccess(newItem));
     } else {
       throw new Error('Item not added to firebase');
     }
   } catch (error) {
-    console.error('Response error on adding', error);
+    dispatch(itemActions.addItemFailure(error.message));
   }
 };
 
 export const editItem = (idd, updatedItem) => async dispatch => {
+  dispatch(itemActions.editItemStart());
   try {
     const response = await axios.put(`https://expense-tracker--react-default-rtdb.firebaseio.com/expense/${idd}.json`, updatedItem);
     if (response.status === 200) {
-      dispatch(editItem({ ...updatedItem, idd }));
+      dispatch(itemActions.editItemSuccess({ idd, updatedItem }));
     } else {
-      throw new Error('Items not Edited successfully');
+      throw new Error('Item not edited successfully');
     }
   } catch (error) {
-    console.error("Response not Ok",error);
+    dispatch(itemActions.editItemFailure(error.message));
   }
 };
 
 export const deleteItem = idd => async dispatch => {
+  dispatch(itemActions.deleteItemStart());
   try {
     const response = await axios.delete(`https://expense-tracker--react-default-rtdb.firebaseio.com/expense/${idd}.json`);
     if (response.status === 200) {
-      dispatch(deleteItem(idd));
+      dispatch(itemActions.deleteItemSuccess(idd));
     } else {
-      throw new Error('Item could not be deleted');
+      throw new Error('Item not deleted successfully');
     }
   } catch (error) {
-    console.error('Error deleting item:', error);
+    dispatch(itemActions.deleteItemFailure(error.message));
   }
 };
 
-export default itemSlicer.reducer;
+export default itemSlice.reducer;
