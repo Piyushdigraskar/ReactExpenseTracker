@@ -51,7 +51,7 @@ const AuthForm = () => {
 
     }
     return <section className={classes.auth}>
-        <h1 >SignUp</h1>
+        <h1 >SignUp please</h1>
         <form onSubmit={SubmitHandler}>
             <div className={classes.control}>
                 <label htmlFor="email">Enter Your Email:</label>
